@@ -30,29 +30,36 @@ public class FareCalculatorService {
         double duration = (double)durationInMilliseconds/3600000;
 
 
-
-        switch (ticket.getParkingSpot().getParkingType()){
-            case CAR: {
-                //Calculate price if the vehicle is a car after having verified if it's a recurrent user or not.
+        if(duration<0.5)
+            {
+                price=0;
+                ticket.setPrice(price);}
+        else
+            {switch (ticket.getParkingSpot().getParkingType()) {
+                case CAR: {
+                    //Calculate price if the vehicle is a car after having verified if it's a recurrent user or not.
                     priceNotRounded = duration * Fare.CAR_RATE_PER_HOUR * ticket.getReductionRate();
-                //Round the price with only two numbers after the dot.
-                BigDecimal bd = new BigDecimal(priceNotRounded).setScale(2, RoundingMode.HALF_UP);
-                price = bd.doubleValue();
-                //Update ticket with price.
-                ticket.setPrice(price);
-                break;
-            }
-            case BIKE: {
-                //Calculate price if the vehicle is a bike after having verified if it's a recurrent user or not.
+                    //Round the price with only two numbers after the dot.
+                    BigDecimal bd = new BigDecimal(priceNotRounded).setScale(2, RoundingMode.HALF_UP);
+                    price = bd.doubleValue();
+                    //Update ticket with price.
+                    ticket.setPrice(price);
+                    break;
+                }
+                case BIKE: {
+                    //Calculate price if the vehicle is a bike after having verified if it's a recurrent user or not.
                     priceNotRounded = duration * Fare.BIKE_RATE_PER_HOUR * ticket.getReductionRate();
-                //Round the price with only two numbers after the dot.
-                BigDecimal bd = new BigDecimal(priceNotRounded).setScale(2, RoundingMode.HALF_UP);
-                price = bd.doubleValue();
-                //Update ticket with price.
-                ticket.setPrice(price);
-                break;
+                    //Round the price with only two numbers after the dot.
+                    BigDecimal bd = new BigDecimal(priceNotRounded).setScale(2, RoundingMode.HALF_UP);
+                    price = bd.doubleValue();
+                    //Update ticket with price.
+                    ticket.setPrice(price);
+                    break;
+                }
+
+                default:
+                    throw new IllegalArgumentException("Unknown Parking Type");
             }
-            default: throw new IllegalArgumentException("Unknown Parking Type");
         }
         return price;
     }

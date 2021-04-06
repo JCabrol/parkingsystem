@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.parkit.parkingsystem.constants.Fare.*;
+import static com.parkit.parkingsystem.constants.ParkingType.BIKE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -62,7 +63,7 @@ public class FareCalculatorServiceTest {
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  60 * 60 * 1000) );
         Date outTime = new Date();
-        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
+        ParkingSpot parkingSpot = new ParkingSpot(1, BIKE,false);
 
         ticket2.setInTime(inTime);
         ticket2.setOutTime(outTime);
@@ -91,7 +92,7 @@ public class FareCalculatorServiceTest {
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() + (  60 * 60 * 1000) );
         Date outTime = new Date();
-        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
+        ParkingSpot parkingSpot = new ParkingSpot(1, BIKE,false);
 
         ticket2.setInTime(inTime);
         ticket2.setOutTime(outTime);
@@ -105,7 +106,7 @@ public class FareCalculatorServiceTest {
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  45 * 60 * 1000) );//45 minutes parking time should give 3/4th parking fare
         Date outTime = new Date();
-        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
+        ParkingSpot parkingSpot = new ParkingSpot(1, BIKE,false);
 
         ticket2.setInTime(inTime);
         ticket2.setOutTime(outTime);
@@ -173,11 +174,25 @@ public class FareCalculatorServiceTest {
         when(ticket.getInTime()).thenReturn(dateInExample);
         when(ticket.getOutTime()).thenReturn(dateOutExample);
         when(ticket.getParkingSpot()).thenReturn(parkingSpot);
-        when(parkingSpot.getParkingType()).thenReturn(ParkingType.BIKE);
+        when(parkingSpot.getParkingType()).thenReturn(BIKE);
         when(ticket.getReductionRate()).thenReturn(REDUCTION_RATE_FOR_RECURRENT_USER);
         //WHEN
         double result = fareCalculatorService.calculateFare(ticket);
         //THEN
         assertThat(result).isEqualTo((new BigDecimal(1.25*BIKE_RATE_PER_HOUR*REDUCTION_RATE_FOR_RECURRENT_USER).setScale(2, RoundingMode.HALF_UP)).doubleValue());
+    }
+
+    @Test
+    public void givenAUserStayingLessThan30Minutes_whenCalculateFare_thenThePriceShouldBe0(){
+        //GIVEN
+        Date dateInExample= new Date();
+        dateInExample.setTime( System.currentTimeMillis() - (  15 * 60 * 1000) );
+        Date dateOutExample= new Date();
+        when(ticket.getInTime()).thenReturn(dateInExample);
+        when(ticket.getOutTime()).thenReturn(dateOutExample);
+        //WHEN
+        double result = fareCalculatorService.calculateFare(ticket);
+        //THEN
+        assertThat(result).isEqualTo(0);
     }
 }
