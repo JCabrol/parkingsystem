@@ -9,9 +9,17 @@ import java.math.RoundingMode;
 public class FareCalculatorService {
 
     public double calculateFare(Ticket ticket){
-        double price = 0;
-        if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){
-            throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
+
+        double price;
+        double priceNotRounded;
+
+       if(ticket.getOutTime() == null)
+        {
+            throw new IllegalArgumentException("Out time provided is incorrect.");
+        }
+        else if(ticket.getOutTime().before(ticket.getInTime()))
+        {
+            throw new IllegalArgumentException("Out time provided is incorrect:" + ticket.getOutTime().toString());
         }
 
         // Calculate time the vehicle stays in the parking. The result is in milliseconds.
@@ -25,23 +33,27 @@ public class FareCalculatorService {
 
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {
-                //Calculate price if the vehicle is a car.
-                double priceNotRounded = duration * Fare.CAR_RATE_PER_HOUR;
+                //Calculate price if the vehicle is a car after having verified if it's a recurrent user or not.
+                    priceNotRounded = duration * Fare.CAR_RATE_PER_HOUR * ticket.getReductionRate();
+                //Round the price with only two numbers after the dot.
                 BigDecimal bd = new BigDecimal(priceNotRounded).setScale(2, RoundingMode.HALF_UP);
                 price = bd.doubleValue();
+                //Update ticket with price.
                 ticket.setPrice(price);
                 break;
             }
             case BIKE: {
-                //Calculate price if the vehicle is a bike.
-                double priceNotRounded = duration * Fare.BIKE_RATE_PER_HOUR;
+                //Calculate price if the vehicle is a bike after having verified if it's a recurrent user or not.
+                    priceNotRounded = duration * Fare.BIKE_RATE_PER_HOUR * ticket.getReductionRate();
+                //Round the price with only two numbers after the dot.
                 BigDecimal bd = new BigDecimal(priceNotRounded).setScale(2, RoundingMode.HALF_UP);
                 price = bd.doubleValue();
+                //Update ticket with price.
                 ticket.setPrice(price);
                 break;
             }
-            default: throw new IllegalArgumentException("Unkown Parking Type");
+            default: throw new IllegalArgumentException("Unknown Parking Type");
         }
-    return price;
+        return price;
     }
 }
