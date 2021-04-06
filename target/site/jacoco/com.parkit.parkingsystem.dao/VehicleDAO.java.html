@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VehicleDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">parking-system</a> &gt; <a href="index.source.html" class="el_package">com.parkit.parkingsystem.dao</a> &gt; <span class="el_source">VehicleDAO.java</span></div><h1>VehicleDAO.java</h1><pre class="source lang-java linenums">package com.parkit.parkingsystem.dao;
+
+import com.parkit.parkingsystem.config.DataBaseConfig;
+import com.parkit.parkingsystem.constants.DBConstants;
+import com.parkit.parkingsystem.model.Vehicle;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+<span class="nc" id="L13">public class VehicleDAO {</span>
+<span class="fc" id="L14">    private static final Logger logger = LogManager.getLogger(&quot;VehicleDAO&quot;);</span>
+
+<span class="nc" id="L16">    public DataBaseConfig dataBaseConfig = new DataBaseConfig();</span>
+
+    public Vehicle getVehicle(String iDVehicle){
+<span class="nc" id="L19">        Connection con = null;</span>
+<span class="nc" id="L20">        Vehicle vehicle = new Vehicle();</span>
+
+        try {
+<span class="nc" id="L23">            con = dataBaseConfig.getConnection();</span>
+<span class="nc" id="L24">            PreparedStatement ps = con.prepareStatement(DBConstants.GET_VEHICLE);</span>
+<span class="nc" id="L25">            ps.setString(1,iDVehicle);</span>
+<span class="nc" id="L26">            ResultSet rs = ps.executeQuery();</span>
+<span class="nc bnc" id="L27" title="All 2 branches missed.">            if(rs.next()){</span>
+<span class="nc" id="L28">                vehicle.setIDVehicle(iDVehicle);</span>
+<span class="nc" id="L29">                vehicle.setRecurrentUser(rs.getBoolean(1));</span>
+            }
+<span class="nc" id="L31">        }catch (Exception ex){</span>
+<span class="nc" id="L32">            logger.error(&quot;Error fetching vehicle&quot;,ex);</span>
+        }finally{
+<span class="nc" id="L34">            dataBaseConfig.closeConnection(con);</span>
+        }
+<span class="nc" id="L36">        return vehicle;</span>
+    }
+
+    public boolean isUserRecurrent(String iDVehicle){
+<span class="nc" id="L40">        Connection con = null;</span>
+<span class="nc" id="L41">        boolean isRecurrent = false;</span>
+        try {
+<span class="nc" id="L43">            con = dataBaseConfig.getConnection();</span>
+<span class="nc" id="L44">            PreparedStatement ps = con.prepareStatement(DBConstants.GET_VEHICLE_RECURRENT);</span>
+<span class="nc" id="L45">            ps.setString(1,iDVehicle);</span>
+<span class="nc" id="L46">            ResultSet rs = ps.executeQuery();</span>
+<span class="nc" id="L47">            isRecurrent = rs.first();</span>
+<span class="nc" id="L48">        }catch (Exception ex){</span>
+<span class="nc" id="L49">            logger.error(&quot;Error fetching next available slot&quot;,ex);</span>
+        }finally{
+<span class="nc" id="L51">            dataBaseConfig.closeConnection(con);</span>
+        }
+<span class="nc" id="L53">        return isRecurrent;</span>
+    }
+
+    public void createVehicle(String iDVehicle){
+<span class="nc" id="L57">        Connection con = null;</span>
+        try {
+<span class="nc" id="L59">            con = dataBaseConfig.getConnection();</span>
+<span class="nc" id="L60">            PreparedStatement ps = con.prepareStatement(DBConstants.CREATE_VEHICLE);</span>
+<span class="nc" id="L61">            ps.setString(1,iDVehicle);</span>
+<span class="nc" id="L62">            ps.execute();</span>
+<span class="nc" id="L63">        }catch (Exception ex){</span>
+<span class="nc" id="L64">            logger.error(&quot;Error fetching next available slot&quot;,ex);</span>
+        }finally {
+<span class="nc" id="L66">            dataBaseConfig.closeConnection(con);</span>
+        }
+<span class="nc" id="L68">    }</span>
+
+    public void updateVehicle(boolean isRecurrent, String iDVehicle){
+<span class="nc" id="L71">        Connection con = null;</span>
+        try {
+<span class="nc" id="L73">            con = dataBaseConfig.getConnection();</span>
+<span class="nc" id="L74">            PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_VEHICLE);</span>
+<span class="nc" id="L75">            ps.setBoolean(1,isRecurrent);</span>
+<span class="nc" id="L76">            ps.setString(2,iDVehicle);</span>
+<span class="nc" id="L77">            ps.execute();</span>
+<span class="nc" id="L78">        }catch (Exception ex){</span>
+<span class="nc" id="L79">            logger.error(&quot;Error fetching next available slot&quot;,ex);</span>
+        }finally {
+<span class="nc" id="L81">            dataBaseConfig.closeConnection(con);</span>
+        }
+<span class="nc" id="L83">    }</span>
+
+    public boolean existVehicle(String iDVehicle){
+<span class="nc" id="L86">        Connection con = null;</span>
+<span class="nc" id="L87">        boolean exists = false;</span>
+        try {
+<span class="nc" id="L89">            con = dataBaseConfig.getConnection();</span>
+<span class="nc" id="L90">            PreparedStatement ps = con.prepareStatement(DBConstants.EXIST_VEHICLE);</span>
+<span class="nc" id="L91">            ps.setString(1,iDVehicle);</span>
+<span class="nc" id="L92">            ResultSet rs = ps.executeQuery();</span>
+<span class="nc" id="L93">            exists = rs.next();</span>
+<span class="nc" id="L94">        }catch (Exception ex){</span>
+<span class="nc" id="L95">            logger.error(&quot;Error fetching next available slot&quot;,ex);</span>
+        }finally {
+<span class="nc" id="L97">            dataBaseConfig.closeConnection(con);</span>
+        }
+<span class="nc" id="L99">        return exists;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
