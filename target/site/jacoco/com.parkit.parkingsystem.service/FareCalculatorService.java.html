@@ -8,35 +8,53 @@ import java.math.RoundingMode;
 
 <span class="fc" id="L9">public class FareCalculatorService {</span>
 
-    public void calculateFare(Ticket ticket){
-<span class="pc bpc" id="L12" title="1 of 4 branches missed.">        if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){</span>
-<span class="fc" id="L13">            throw new IllegalArgumentException(&quot;Out time provided is incorrect:&quot;+ticket.getOutTime().toString());</span>
+    public double calculateFare(Ticket ticket){
+
+        double price;
+        double priceNotRounded;
+
+<span class="pc bpc" id="L16" title="1 of 2 branches missed.">       if(ticket.getOutTime() == null)</span>
+        {
+<span class="nc" id="L18">            throw new IllegalArgumentException(&quot;Out time provided is incorrect.&quot;);</span>
+        }
+<span class="fc bfc" id="L20" title="All 2 branches covered.">        else if(ticket.getOutTime().before(ticket.getInTime()))</span>
+        {
+<span class="fc" id="L22">            throw new IllegalArgumentException(&quot;Out time provided is incorrect:&quot; + ticket.getOutTime().toString());</span>
         }
 
         // Calculate time the vehicle stays in the parking. The result is in milliseconds.
-<span class="fc" id="L17">        long inMilliseconds = ticket.getInTime().getTime();</span>
-<span class="fc" id="L18">        long outMilliseconds = ticket.getOutTime().getTime();</span>
-<span class="fc" id="L19">        long durationInMilliseconds = outMilliseconds - inMilliseconds;</span>
+<span class="fc" id="L26">        long inMilliseconds = ticket.getInTime().getTime();</span>
+<span class="fc" id="L27">        long outMilliseconds = ticket.getOutTime().getTime();</span>
+<span class="fc" id="L28">        long durationInMilliseconds = outMilliseconds - inMilliseconds;</span>
         //Convert the duration in hours. The result is not rounded.
-<span class="fc" id="L21">        double durationWithTooMuchNumbers = (double)durationInMilliseconds/3600000;</span>
-        //Round the result to have only two numbers after the dot.
-<span class="fc" id="L23">        BigDecimal bd = new BigDecimal(durationWithTooMuchNumbers).setScale(2, RoundingMode.HALF_UP);</span>
-<span class="fc" id="L24">        double duration = bd.doubleValue();</span>
+<span class="fc" id="L30">        double duration = (double)durationInMilliseconds/3600000;</span>
 
 
-<span class="pc bpc" id="L27" title="1 of 3 branches missed.">        switch (ticket.getParkingSpot().getParkingType()){</span>
+
+<span class="pc bpc" id="L34" title="1 of 3 branches missed.">        switch (ticket.getParkingSpot().getParkingType()){</span>
             case CAR: {
-                //Calculate price if the vehicle is a car.
-<span class="fc" id="L30">                ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);</span>
-<span class="fc" id="L31">                break;</span>
+                //Calculate price if the vehicle is a car after having verified if it's a recurrent user or not.
+<span class="fc" id="L37">                    priceNotRounded = duration * Fare.CAR_RATE_PER_HOUR * ticket.getReductionRate();</span>
+                //Round the price with only two numbers after the dot.
+<span class="fc" id="L39">                BigDecimal bd = new BigDecimal(priceNotRounded).setScale(2, RoundingMode.HALF_UP);</span>
+<span class="fc" id="L40">                price = bd.doubleValue();</span>
+                //Update ticket with price.
+<span class="fc" id="L42">                ticket.setPrice(price);</span>
+<span class="fc" id="L43">                break;</span>
             }
             case BIKE: {
-                //Calculate price if the vehicle is a bike.
-<span class="fc" id="L35">                ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);</span>
-<span class="fc" id="L36">                break;</span>
+                //Calculate price if the vehicle is a bike after having verified if it's a recurrent user or not.
+<span class="fc" id="L47">                    priceNotRounded = duration * Fare.BIKE_RATE_PER_HOUR * ticket.getReductionRate();</span>
+                //Round the price with only two numbers after the dot.
+<span class="fc" id="L49">                BigDecimal bd = new BigDecimal(priceNotRounded).setScale(2, RoundingMode.HALF_UP);</span>
+<span class="fc" id="L50">                price = bd.doubleValue();</span>
+                //Update ticket with price.
+<span class="fc" id="L52">                ticket.setPrice(price);</span>
+<span class="fc" id="L53">                break;</span>
             }
-<span class="nc" id="L38">            default: throw new IllegalArgumentException(&quot;Unkown Parking Type&quot;);</span>
+<span class="nc" id="L55">            default: throw new IllegalArgumentException(&quot;Unknown Parking Type&quot;);</span>
         }
-<span class="fc" id="L40">    }</span>
+<span class="fc" id="L57">        return price;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
