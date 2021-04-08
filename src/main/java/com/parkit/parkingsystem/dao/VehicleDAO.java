@@ -71,7 +71,10 @@ public class VehicleDAO {
             ps.setString(1,iDVehicle);
             ResultSet rs = ps.executeQuery();
             // put the first value (there is only one value) returned by the query in the boolean isRecurrent.
-            isRecurrent = rs.first();
+            if (rs.next())
+            {
+                isRecurrent = rs.getBoolean("RECURRENT_USER");
+            }
         }catch (Exception ex){
             //if there is an exception an error message is logged.
             logger.error("Error getting boolean isRecurrent on a vehicle:",ex);
