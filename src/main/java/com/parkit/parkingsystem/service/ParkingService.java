@@ -55,16 +55,15 @@ public class ParkingService {
                 ticket.setOutTime(null);
                 ticket.setVehicle(vehicle);
                 ticket.setReductionRate(1);
-                ticketDAO.saveTicket(ticket);
-
-
                 if ((vehicleDAO.existVehicle(vehicleRegNumber))&&(vehicleDAO.isUserRecurrent(vehicleRegNumber))){
-                    System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
+                    System.out.println("\n"+"Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount."+"\n");
                     ticket.setReductionRate(REDUCTION_RATE_FOR_RECURRENT_USER);
                 }
                 else if(!(vehicleDAO.existVehicle(vehicleRegNumber))){
                     vehicleDAO.createVehicle(vehicleRegNumber);
                 }
+
+                ticketDAO.saveTicket(ticket);
 
                 System.out.println("Generated Ticket and saved in DB");
                 System.out.println("Please park your vehicle in spot number:"+parkingSpot.getId());
@@ -133,7 +132,9 @@ public class ParkingService {
                 parkingSpotDAO.updateParking(parkingSpot);
                 System.out.println("Please pay the parking fare:" + ticket.getPrice());
                 System.out.println("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
-                vehicleDAO.updateVehicle(true,vehicleRegNumber);
+                //The user become recurrent if he pays.
+                if(ticket.getPrice()!=0)
+                    {vehicleDAO.updateVehicle(true,vehicleRegNumber);}
             }else{
                 System.out.println("Unable to update ticket information. Error occurred");
             }
