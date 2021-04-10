@@ -14,7 +14,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
+import static com.parkit.parkingsystem.constants.Fare.*;
+import static com.parkit.parkingsystem.constants.ParkingType.BIKE;
+import static com.parkit.parkingsystem.constants.ParkingType.CAR;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import java.util.Date;
 
 import static org.mockito.Mockito.*;
@@ -35,7 +39,7 @@ public class ParkingServiceTest {
 
     @BeforeEach
     private void setUpPerTest() {
-        try {
+        /*try {
             when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 
             ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
@@ -52,13 +56,24 @@ public class ParkingServiceTest {
         } catch (Exception e) {
             e.printStackTrace();
             throw  new RuntimeException("Failed to set up test mock objects");
-        }
+        }*/
     }
 
     @Test
     public void processExitingVehicleTest(){
         parkingService.processExitingVehicle();
         verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
+    }
+
+    @Test
+    public void getVehicleTypeTest(){
+        //GIVEN
+        ParkingType result;
+        when(inputReaderUtil.readSelection()).thenReturn(1);
+        //WHEN
+        result = parkingService.getVehicleType();
+        //THEN
+        assertThat(result).isEqualTo(ParkingType.CAR);
     }
 
 }

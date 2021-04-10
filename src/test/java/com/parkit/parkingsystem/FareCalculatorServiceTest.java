@@ -148,7 +148,7 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void givenARecurrentUserWithACar_whenCalculateFare_thenThePriceShouldBe5PerCentDiscount(){
+    public void givenARecurrentUserWithACar_whenCalculateFare_thenDiscount(){
         //GIVEN
         Date dateInExample= new Date();
         dateInExample.setTime( System.currentTimeMillis() - (  150 * 60 * 1000) );
