@@ -195,4 +195,6 @@ public class FareCalculatorServiceTest {
         //THEN
         assertThat(result).isEqualTo(0);
     }
+
+
 }
