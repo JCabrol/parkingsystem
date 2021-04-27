@@ -30,31 +30,38 @@ import java.math.RoundingMode;
 <span class="fc" id="L30">        double duration = (double)durationInMilliseconds/3600000;</span>
 
 
+<span class="fc bfc" id="L33" title="All 2 branches covered.">        if(duration&lt;0.5)</span>
+            {
+<span class="fc" id="L35">                price=0;</span>
+<span class="fc" id="L36">                ticket.setPrice(price);}</span>
+        else
+<span class="pc bpc" id="L38" title="1 of 3 branches missed.">            {switch (ticket.getParkingSpot().getParkingType()) {</span>
+                case CAR: {
+                    //Calculate price if the vehicle is a car after having verified if it's a recurrent user or not.
+<span class="fc" id="L41">                    priceNotRounded = duration * Fare.CAR_RATE_PER_HOUR * ticket.getReductionRate();</span>
+                    //Round the price with only two numbers after the dot.
+<span class="fc" id="L43">                    BigDecimal bd = new BigDecimal(priceNotRounded).setScale(2, RoundingMode.HALF_UP);</span>
+<span class="fc" id="L44">                    price = bd.doubleValue();</span>
+                    //Update ticket with price.
+<span class="fc" id="L46">                    ticket.setPrice(price);</span>
+<span class="fc" id="L47">                    break;</span>
+                }
+                case BIKE: {
+                    //Calculate price if the vehicle is a bike after having verified if it's a recurrent user or not.
+<span class="fc" id="L51">                    priceNotRounded = duration * Fare.BIKE_RATE_PER_HOUR * ticket.getReductionRate();</span>
+                    //Round the price with only two numbers after the dot.
+<span class="fc" id="L53">                    BigDecimal bd = new BigDecimal(priceNotRounded).setScale(2, RoundingMode.HALF_UP);</span>
+<span class="fc" id="L54">                    price = bd.doubleValue();</span>
+                    //Update ticket with price.
+<span class="fc" id="L56">                    ticket.setPrice(price);</span>
+<span class="fc" id="L57">                    break;</span>
+                }
 
-<span class="pc bpc" id="L34" title="1 of 3 branches missed.">        switch (ticket.getParkingSpot().getParkingType()){</span>
-            case CAR: {
-                //Calculate price if the vehicle is a car after having verified if it's a recurrent user or not.
-<span class="fc" id="L37">                    priceNotRounded = duration * Fare.CAR_RATE_PER_HOUR * ticket.getReductionRate();</span>
-                //Round the price with only two numbers after the dot.
-<span class="fc" id="L39">                BigDecimal bd = new BigDecimal(priceNotRounded).setScale(2, RoundingMode.HALF_UP);</span>
-<span class="fc" id="L40">                price = bd.doubleValue();</span>
-                //Update ticket with price.
-<span class="fc" id="L42">                ticket.setPrice(price);</span>
-<span class="fc" id="L43">                break;</span>
+                default:
+<span class="nc" id="L61">                    throw new IllegalArgumentException(&quot;Unknown Parking Type&quot;);</span>
             }
-            case BIKE: {
-                //Calculate price if the vehicle is a bike after having verified if it's a recurrent user or not.
-<span class="fc" id="L47">                    priceNotRounded = duration * Fare.BIKE_RATE_PER_HOUR * ticket.getReductionRate();</span>
-                //Round the price with only two numbers after the dot.
-<span class="fc" id="L49">                BigDecimal bd = new BigDecimal(priceNotRounded).setScale(2, RoundingMode.HALF_UP);</span>
-<span class="fc" id="L50">                price = bd.doubleValue();</span>
-                //Update ticket with price.
-<span class="fc" id="L52">                ticket.setPrice(price);</span>
-<span class="fc" id="L53">                break;</span>
-            }
-<span class="nc" id="L55">            default: throw new IllegalArgumentException(&quot;Unknown Parking Type&quot;);</span>
         }
-<span class="fc" id="L57">        return price;</span>
+<span class="fc" id="L64">        return price;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

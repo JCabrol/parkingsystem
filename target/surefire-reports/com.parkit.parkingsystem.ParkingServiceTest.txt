@@ -1,4 +1,12 @@
 -------------------------------------------------------------------------------
 Test set: com.parkit.parkingsystem.ParkingServiceTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.781 s - in com.parkit.parkingsystem.ParkingServiceTest
+Tests run: 2, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 3.766 s <<< FAILURE! - in com.parkit.parkingsystem.ParkingServiceTest
+processExitingVehicleTest  Time elapsed: 3.696 s  <<< ERROR!
+java.lang.NullPointerException
+	at com.parkit.parkingsystem.ParkingServiceTest.processExitingVehicleTest(ParkingServiceTest.java:64)
+
+getVehicleTypeTest  Time elapsed: 0.063 s  <<< ERROR!
+java.lang.NullPointerException
+	at com.parkit.parkingsystem.ParkingServiceTest.getVehicleTypeTest(ParkingServiceTest.java:74)
+
