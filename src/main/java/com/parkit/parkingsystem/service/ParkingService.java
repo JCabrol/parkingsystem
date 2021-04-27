@@ -16,17 +16,30 @@ import java.util.Date;
 
 import static com.parkit.parkingsystem.constants.Fare.REDUCTION_RATE_FOR_RECURRENT_USER;
 
+@SuppressWarnings({"unused", "UnusedAssignment"})
 public class ParkingService {
 
     private static final Logger logger = LogManager.getLogger("ParkingService");
 
-    private static FareCalculatorService fareCalculatorService = new FareCalculatorService();
+    private static final FareCalculatorService fareCalculatorService = new FareCalculatorService();
 
     private InputReaderUtil inputReaderUtil;
     private ParkingSpotDAO parkingSpotDAO;
-    private  TicketDAO ticketDAO;
+    private TicketDAO ticketDAO;
     private VehicleDAO vehicleDAO;
 
+    public void setInputReaderUtil(InputReaderUtil inputReaderUtil){
+        this.inputReaderUtil=inputReaderUtil;
+    }
+    public void setParkingSpotDAO(ParkingSpotDAO parkingSpotDAO){
+        this.parkingSpotDAO=parkingSpotDAO;
+    }
+    public void setTicketDAO(TicketDAO ticketDAO){
+        this.ticketDAO=ticketDAO;
+    }
+    public void setVehicleDAO(VehicleDAO vehicleDAO){
+        this.vehicleDAO=vehicleDAO;
+    }
     public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO, VehicleDAO vehicleDAO){
         this.inputReaderUtil = inputReaderUtil;
         this.parkingSpotDAO = parkingSpotDAO;
@@ -47,7 +60,6 @@ public class ParkingService {
                 Vehicle vehicle = new Vehicle();
                 vehicle.setIDVehicle(vehicleRegNumber);
                 //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
-                //ticket.setId(ticketID);
                 ticket.setParkingSpot(parkingSpot);
                 ticket.setVehicleRegNumber(vehicleRegNumber);
                 ticket.setPrice(0);

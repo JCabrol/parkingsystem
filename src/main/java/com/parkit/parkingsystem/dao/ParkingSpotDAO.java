@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+@SuppressWarnings({"UnusedReturnValue", "unused"})
 public class ParkingSpotDAO {
     private static final Logger logger = LogManager.getLogger("ParkingSpotDAO");
 
@@ -25,7 +26,7 @@ public class ParkingSpotDAO {
             ps.setString(1, parkingType.toString());
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
-                result = rs.getInt(1);;
+                result = rs.getInt(1);
             }
             dataBaseConfig.closeResultSet(rs);
             dataBaseConfig.closePreparedStatement(ps);
@@ -38,7 +39,7 @@ public class ParkingSpotDAO {
     }
 
     public boolean updateParking(ParkingSpot parkingSpot){
-        //update the availability fo that parking slot
+        //update the availability for that parking slot
         Connection con = null;
         try {
             con = dataBaseConfig.getConnection();
@@ -55,5 +56,25 @@ public class ParkingSpotDAO {
             dataBaseConfig.closeConnection(con);
         }
     }
+    public boolean isParkingSpotAvailable(int parkingSpotID){
+        //check if the parkingSpot is available or not
+        Connection con = null;
+        boolean isAvailable = false;
+        try {
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement(DBConstants.GET_PARKING_SPOT);
+            ps.setInt(1,parkingSpotID);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+            isAvailable = rs.getBoolean(1);
+            }
+            dataBaseConfig.closePreparedStatement(ps);
+        }catch (Exception ex){
+            logger.error("Error updating parking info",ex);
+            return false;
+        }finally {
+            dataBaseConfig.closeConnection(con);
 
+        }return isAvailable;
+    }
 }

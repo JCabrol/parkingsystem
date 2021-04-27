@@ -5,8 +5,10 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Scanner;
 
+@SuppressWarnings({"UnnecessaryLocalVariable", "RedundantThrows"})
 public class InputReaderUtil {
 
+    @SuppressWarnings("FieldMayBeFinal")
     private static Scanner scan = new Scanner(System.in);
     private static final Logger logger = LogManager.getLogger("InputReaderUtil");
 
