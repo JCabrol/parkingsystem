@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Vehicle.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">parking-system</a> &gt; <a href="index.source.html" class="el_package">com.parkit.parkingsystem.model</a> &gt; <span class="el_source">Vehicle.java</span></div><h1>Vehicle.java</h1><pre class="source lang-java linenums">package com.parkit.parkingsystem.model;
+
+/**
+ * Class vehicle represents a vehicle (car or bike) which uses the parking.
+ *
+ * A vehicle is characterised by two elements:
+ * -A string iDVehicle which is the registration number of the car. It cannot be changed.
+ *
+ * -A boolean recurrentUser which indicate if the vehicle is a recurrent user of the parking.
+ * When the vehicle is created, it's automatically set to false.
+ * It can be changed to true when the vehicle uses the parking several times.
+ */
+<span class="nc" id="L13">public class Vehicle {</span>
+    /**
+     * The id of the vehicle which is its registration number. It cannot be changed.
+     */
+    private String iDVehicle;
+    /**
+     * The boolean indicates if the vehicle is a recurrent user of the parking or not.
+     * It's set to false when a new vehicle is created.
+     */
+    private boolean recurrentUser;
+
+    /**
+     * Return the ID of a vehicle.
+     * @return iDVehicle which is a String representing the vehicle's registration number.
+     */
+    public String getIDVehicle(){
+<span class="nc" id="L29">        return iDVehicle;</span>
+    }
+
+    /**
+     * A constructor of the class Vehicle.
+     * @param ID
+     * which is a string representing the vehicle's registration number.
+     */
+    public void setIDVehicle(String ID){
+<span class="nc" id="L38">       this.iDVehicle = ID;</span>
+<span class="nc" id="L39">    }</span>
+
+    /**
+     *
+     * @return recurrentUser
+     * which is a boolean indicating if the vehicle is a recurrent user of the parking or not.
+     */
+    public boolean getRecurrentUser() {
+<span class="nc" id="L47">        return recurrentUser;</span>
+    }
+
+    /**
+     * A constructor of the class Vehicle.
+     * @param recurrent
+     * which is a boolean indicating if the vehicle is a recurrent parking user or not.
+     */
+    public void setRecurrentUser(boolean recurrent){
+<span class="nc" id="L56">        this.recurrentUser = recurrent;</span>
+<span class="nc" id="L57">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

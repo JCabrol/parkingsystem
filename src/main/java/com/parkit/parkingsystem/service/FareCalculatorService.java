@@ -8,9 +8,18 @@ import java.math.RoundingMode;
 
 public class FareCalculatorService {
 
-    public void calculateFare(Ticket ticket){
-        if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){
-            throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
+    public double calculateFare(Ticket ticket){
+
+        double price;
+        double priceNotRounded;
+
+       if(ticket.getOutTime() == null)
+        {
+            throw new IllegalArgumentException("Out time provided is incorrect.");
+        }
+        else if(ticket.getOutTime().before(ticket.getInTime()))
+        {
+            throw new IllegalArgumentException("Out time provided is incorrect:" + ticket.getOutTime().toString());
         }
 
         // Calculate time the vehicle stays in the parking. The result is in milliseconds.
@@ -18,24 +27,40 @@ public class FareCalculatorService {
         long outMilliseconds = ticket.getOutTime().getTime();
         long durationInMilliseconds = outMilliseconds - inMilliseconds;
         //Convert the duration in hours. The result is not rounded.
-        double durationWithTooMuchNumbers = (double)durationInMilliseconds/3600000;
-        //Round the result to have only two numbers after the dot.
-        BigDecimal bd = new BigDecimal(durationWithTooMuchNumbers).setScale(2, RoundingMode.HALF_UP);
-        double duration = bd.doubleValue();
+        double duration = (double)durationInMilliseconds/3600000;
 
 
-        switch (ticket.getParkingSpot().getParkingType()){
-            case CAR: {
-                //Calculate price if the vehicle is a car.
-                ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
-                break;
-            }
-            case BIKE: {
-                //Calculate price if the vehicle is a bike.
-                ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);
-                break;
-            }
-            default: throw new IllegalArgumentException("Unkown Parking Type");
+        if(duration<0.5){
+                price=0;
+                ticket.setPrice(price);
         }
+        else {
+            switch (ticket.getParkingSpot().getParkingType()) {
+                case CAR: {
+                    //Calculate price if the vehicle is a car after having verified if it's a recurrent user or not.
+                    priceNotRounded = duration * Fare.CAR_RATE_PER_HOUR * ticket.getReductionRate();
+                    //Round the price with only two numbers after the dot.
+                    BigDecimal bd = new BigDecimal(priceNotRounded).setScale(2, RoundingMode.HALF_UP);
+                    price = bd.doubleValue();
+                    //Update ticket with price.
+                    ticket.setPrice(price);
+                    break;
+                }
+                case BIKE: {
+                    //Calculate price if the vehicle is a bike after having verified if it's a recurrent user or not.
+                    priceNotRounded = duration * Fare.BIKE_RATE_PER_HOUR * ticket.getReductionRate();
+                    //Round the price with only two numbers after the dot.
+                    BigDecimal bd = new BigDecimal(priceNotRounded).setScale(2, RoundingMode.HALF_UP);
+                    price = bd.doubleValue();
+                    //Update ticket with price.
+                    ticket.setPrice(price);
+                    break;
+                }
+
+                default:
+                    throw new IllegalArgumentException("Unknown Parking Type");
+            }
+        }
+        return price;
     }
 }
