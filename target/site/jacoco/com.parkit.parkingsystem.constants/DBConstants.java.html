@@ -4,6 +4,7 @@
 
     public static final String GET_NEXT_PARKING_SPOT = &quot;select min(PARKING_NUMBER) from parking where AVAILABLE = true and TYPE = ?&quot;;
     public static final String UPDATE_PARKING_SPOT = &quot;update parking set available = ? where PARKING_NUMBER = ?&quot;;
+    public static final String GET_PARKING_SPOT = &quot;select AVAILABLE,TYPE from parking where PARKING_NUMBER = ?&quot;;
 
     public static final String SAVE_TICKET = &quot;insert into ticket(PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME, REDUCTION_RATE) values(?,?,?,?,?,?)&quot;;
     public static final String UPDATE_TICKET = &quot;update ticket set PRICE=?, OUT_TIME=? where ID=?&quot;;

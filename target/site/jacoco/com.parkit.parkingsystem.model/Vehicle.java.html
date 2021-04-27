@@ -10,7 +10,8 @@
  * When the vehicle is created, it's automatically set to false.
  * It can be changed to true when the vehicle uses the parking several times.
  */
-<span class="nc" id="L13">public class Vehicle {</span>
+@SuppressWarnings(&quot;unused&quot;)
+<span class="fc" id="L14">public class Vehicle {</span>
     /**
      * The id of the vehicle which is its registration number. It cannot be changed.
      */
@@ -26,7 +27,7 @@
      * @return iDVehicle which is a String representing the vehicle's registration number.
      */
     public String getIDVehicle(){
-<span class="nc" id="L29">        return iDVehicle;</span>
+<span class="nc" id="L30">        return iDVehicle;</span>
     }
 
     /**
@@ -35,8 +36,8 @@
      * which is a string representing the vehicle's registration number.
      */
     public void setIDVehicle(String ID){
-<span class="nc" id="L38">       this.iDVehicle = ID;</span>
-<span class="nc" id="L39">    }</span>
+<span class="fc" id="L39">       this.iDVehicle = ID;</span>
+<span class="fc" id="L40">    }</span>
 
     /**
      *
@@ -44,7 +45,7 @@
      * which is a boolean indicating if the vehicle is a recurrent user of the parking or not.
      */
     public boolean getRecurrentUser() {
-<span class="nc" id="L47">        return recurrentUser;</span>
+<span class="nc" id="L48">        return recurrentUser;</span>
     }
 
     /**
@@ -53,8 +54,8 @@
      * which is a boolean indicating if the vehicle is a recurrent parking user or not.
      */
     public void setRecurrentUser(boolean recurrent){
-<span class="nc" id="L56">        this.recurrentUser = recurrent;</span>
-<span class="nc" id="L57">    }</span>
+<span class="nc" id="L57">        this.recurrentUser = recurrent;</span>
+<span class="nc" id="L58">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

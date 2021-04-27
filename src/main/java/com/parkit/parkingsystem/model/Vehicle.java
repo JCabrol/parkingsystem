@@ -10,6 +10,7 @@ package com.parkit.parkingsystem.model;
  * When the vehicle is created, it's automatically set to false.
  * It can be changed to true when the vehicle uses the parking several times.
  */
+@SuppressWarnings("unused")
 public class Vehicle {
     /**
      * The id of the vehicle which is its registration number. It cannot be changed.

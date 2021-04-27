@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 
+@SuppressWarnings("UnusedReturnValue")
 public class TicketDAO {
 
     private static final Logger logger = LogManager.getLogger("TicketDAO");
@@ -37,8 +38,8 @@ public class TicketDAO {
             logger.error("Error fetching next available slot",ex);
         }finally {
             dataBaseConfig.closeConnection(con);
-            return false;
-        }
+
+        }return false;
     }
 
     public Ticket getTicket(String vehicleRegNumber) {
@@ -52,8 +53,13 @@ public class TicketDAO {
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
                 ticket = new Ticket();
-                ParkingSpot parkingSpot = new ParkingSpot(rs.getInt(1), ParkingType.valueOf(rs.getString(6)),false);
-                ticket.setParkingSpot(parkingSpot);
+                PreparedStatement ps2 = con.prepareStatement(DBConstants.GET_PARKING_SPOT);
+                ps2.setInt(1,rs.getInt(1));
+                ResultSet rs2 = ps2.executeQuery();
+                if(rs2.next()){
+                    ParkingSpot parkingSpot = new ParkingSpot(rs.getInt(1), ParkingType.valueOf(rs2.getString(2)),rs2.getBoolean(1));
+                    ticket.setParkingSpot(parkingSpot);
+                }
                 ticket.setId(rs.getInt(2));
                 ticket.setVehicleRegNumber(vehicleRegNumber);
                 ticket.setPrice(rs.getDouble(3));
@@ -67,8 +73,8 @@ public class TicketDAO {
             logger.error("Error fetching next available slot",ex);
         }finally {
             dataBaseConfig.closeConnection(con);
-            return ticket;
-        }
+
+        }return ticket;
     }
 
     public boolean updateTicket(Ticket ticket) {
