@@ -1,6 +1,16 @@
 # Parking System
+
 A command line app for managing the parking system. 
 This app uses Java to run and stores the data in Mysql DB.
+
+A project done as part of my Java application developper training (project n°4).
+
+The main skills acquired with this project were:
+* implement unit tests
+* implement integration tests
+* produce a test execution report
+* provide corrective patches when the test execution report suggests so
+
 
 ## Getting Started
 
